@@ -1,4 +1,3 @@
-     // src/App.js
      import React, { useEffect, useState } from 'react';
      import { db } from './firebase';
      import WordCard from './wordCard';
@@ -12,14 +11,22 @@
        const [showTranslation, setShowTranslation] = useState(false);
        const [showCard, setShowCard] = useState(true);
        const [started, setStarted] = useState(false);
+       const [sentence, setSentence] = useState('');
+       const [loading, setLoading] = useState(false);
+       const [error, setError] = useState(null); // Hata durumu ekleyin
 
        useEffect(() => {
          const fetchWords = async () => {
-           const wordCollection = collection(db, 'words');
-           const wordSnapshot = await getDocs(wordCollection);
-           const wordsList = wordSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-           setWords(wordsList);
-           setCurrentWordIndex(Math.floor(Math.random() * wordsList.length)); // Rastgele bir kelime seç
+           try {
+             const wordCollection = collection(db, 'words');
+             const wordSnapshot = await getDocs(wordCollection);
+             const wordsList = wordSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+             setWords(wordsList);
+             setCurrentWordIndex(Math.floor(Math.random() * wordsList.length)); // Rastgele bir kelime seç
+           } catch (err) {
+             console.error('Error fetching words:', err);
+             setError('Quota exceeded. Please try again later.'); // Hata mesajı ayarlayın
+           }
          };
 
          fetchWords();
@@ -31,6 +38,7 @@
            setCurrentWordIndex(Math.floor(Math.random() * words.length)); // Rastgele bir kelime seç
            setShowTranslation(false); // Türkçe karşılığını gizle
            setShowCard(true); // Kartı göster
+           setSentence(''); // Cümleyi sıfırla
          }, 300); // Geçiş süresi
        };
 
@@ -54,21 +62,32 @@
                >
                  Back
                </button>
-               {words.length > 0 && (
-                 <WordCard
-                   english={words[currentWordIndex].id}
-                   turkish={words[currentWordIndex].turkish}
-                   showTranslation={showTranslation}
-                   setShowTranslation={setShowTranslation}
-                   showCard={showCard}
-                 />
+               {error ? (
+                 <div className="text-red-500">{error}</div> // Hata mesajını göster
+               ) : (
+                 <>
+                   {words.length > 0 && (
+                     <WordCard
+                       english={words[currentWordIndex].id}
+                       turkish={words[currentWordIndex].turkish}
+                       showTranslation={showTranslation}
+                       setShowTranslation={setShowTranslation}
+                       showCard={showCard}
+                     />
+                   )}
+                   {sentence && (
+                     <div className="w-80 h-40 border-2 border-light-sea-green bg-moonstone p-6 m-4 rounded-lg shadow-xl flex flex-col justify-center items-center">
+                       <p className="text-xl text-off-white">{sentence}</p>
+                     </div>
+                   )}
+                   <button
+                     onClick={handleNextWord}
+                     className="mt-8 px-6 py-3 bg-straw text-dark-green font-bold rounded-full shadow-lg transition duration-300 transform hover:scale-105"
+                   >
+                     Next
+                   </button>
+                 </>
                )}
-               <button
-                 onClick={handleNextWord}
-                 className="mt-8 px-6 py-3 bg-straw text-dark-green font-bold rounded-full shadow-lg transition duration-300 transform hover:scale-105"
-               >
-                 Next
-               </button>
              </>
            )}
          </div>
