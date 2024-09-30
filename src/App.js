@@ -83,8 +83,8 @@ function App() {
           <>
             <button
               onClick={handleBackToCategoryMenu}
-              className="absolute top-4 right-4 px-4 py-2 bg-straw text-dark-green font-bold rounded-full shadow-lg transition duration-300 transform hover:scale-105"
-            >
+              className="absolute top-2 right-2 px-2 py-2 bg-straw text-dark-green font-bold rounded-full shadow-lg transition duration-300 transform hover:scale-105"
+              >
               Back
             </button>
             <div className="text-center relative">
@@ -137,7 +137,7 @@ function App() {
                   </button>
                   <button
                     onClick={handleBackToPartMenu}
-                    className="absolute top-4 right-4 px-4 py-2 bg-straw text-dark-green font-bold rounded-full shadow-lg transition duration-300 transform hover:scale-105"
+                    className="absolute top-2 right-2 px-2 py-2 bg-straw text-dark-green font-bold rounded-full shadow-lg transition duration-300 transform hover:scale-105"
                     >
                     Back
                   </button>
