@@ -1,4 +1,4 @@
-# Vocabulary Study Application
+# Vocabulary Study Application (Vocab App)
 
 ## Project Purpose
 This project is designed to help users learn English words and see their Turkish translations. Users can click on word cards to reveal the Turkish translation and press the "Next" button to move to a randomly selected next word.
