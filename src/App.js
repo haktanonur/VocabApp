@@ -18,6 +18,7 @@ function App() {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [showPartMenu, setShowPartMenu] = useState(false);
   const [showWordList, setShowWordList] = useState(false); // Yeni state
+  const [selectedPart, setSelectedPart] = useState(null); // Yeni state
 
   const fetchWords = async (category, part) => {
     try {
@@ -52,6 +53,7 @@ function App() {
   };
 
   const handlePartClick = (part) => {
+    setSelectedPart(part); // Seçilen part'ı kaydet
     fetchWords(selectedCategory, part);
     setStarted(true);
     setShowPartMenu(false);
@@ -134,12 +136,17 @@ function App() {
                   {showWordList && (
                     <div className="popup-overlay">
                       <div className="popup-content">
-                        <button
-                          onClick={() => setShowWordList(false)} // Pop-up kapatma butonu
-                          className="popup-close-button"
-                        >
-                          &times;
-                        </button>
+                        <div className="flex justify-between items-center mb-4">
+                          <h2 className="text-lg font-bold">
+                            {selectedCategory} - {selectedPart} Words
+                          </h2>
+                          <button
+                            onClick={() => setShowWordList(false)} // Pop-up kapatma butonu
+                            className="popup-close-button"
+                          >
+                            &times;
+                          </button>
+                        </div>
                         <ul>
                           {words.map(word => (
                             <li key={word.id} className="word-list-item">
