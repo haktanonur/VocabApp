@@ -17,6 +17,7 @@ function App() {
   const [showCategoryMenu, setShowCategoryMenu] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [showPartMenu, setShowPartMenu] = useState(false);
+  const [showWordList, setShowWordList] = useState(false); // Yeni state
 
   const fetchWords = async (category, part) => {
     try {
@@ -124,21 +125,48 @@ function App() {
                       showCard={showCard}
                     />
                   )}
+                  <button
+                    onClick={() => setShowWordList(true)} // Listeleme butonu
+                    className="absolute top-2 left-2 px-2 py-2 bg-straw text-dark-green font-bold rounded-full shadow-lg transition duration-300 transform hover:scale-105"
+                  >
+                    List
+                  </button>
+                  {showWordList && (
+                    <div className="popup-overlay">
+                      <div className="popup-content">
+                        <button
+                          onClick={() => setShowWordList(false)} // Pop-up kapatma butonu
+                          className="popup-close-button"
+                        >
+                          &times;
+                        </button>
+                        <ul>
+                          {words.map(word => (
+                            <li key={word.id} className="word-list-item">
+                              {word.id} - {word.turkish}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  )}
                   {sentence && (
                     <div className="w-80 h-40 border-2 border-light-sea-green bg-moonstone p-6 m-4 rounded-lg shadow-xl flex flex-col justify-center items-center">
                       <p className="text-xl text-off-white">{sentence}</p>
                     </div>
                   )}
-                  <button
-                    onClick={handleNextWord}
-                    className="mt-8 px-6 py-3 bg-straw text-dark-green font-bold rounded-full shadow-lg transition duration-300 transform hover:scale-105"
-                  >
-                    Next
-                  </button>
+                  {!showWordList && ( // "Next" butonunu pop-up kapalıyken göster
+                    <button
+                      onClick={handleNextWord}
+                      className="mt-8 px-6 py-3 bg-straw text-dark-green font-bold rounded-full shadow-lg transition duration-300 transform hover:scale-105"
+                    >
+                      Next
+                    </button>
+                  )}
                   <button
                     onClick={handleBackToPartMenu}
                     className="absolute top-2 right-2 px-2 py-2 bg-straw text-dark-green font-bold rounded-full shadow-lg transition duration-300 transform hover:scale-105"
-                    >
+                  >
                     Back
                   </button>
                 </>
